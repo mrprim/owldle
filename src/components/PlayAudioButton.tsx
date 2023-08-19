@@ -6,6 +6,7 @@ const PlayAudioButton = () => {
 
   const play = useCallback(async () => {
     const msg = new SpeechSynthesisUtterance(question)
+    msg.rate = .65
 
     await window.speechSynthesis.speak(msg)
   }, [question])

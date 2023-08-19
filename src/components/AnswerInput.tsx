@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { useAtomValue } from "jotai";
 import { answerAtom } from "../useAnswerActions";
 import { MAX_CHARACTERS } from "../data/settings";
@@ -42,14 +42,16 @@ return <div className={`
 }
 
 const AnswerInput: FC<Props> = ({ questionId = 0 }) => {
+  const hiddenInputRef = useRef<HTMLInputElement | null>(null);
   const { id: currentQuestionId } = useCurrentQuestion();
   const activeAnswer = useAtomValue(answerAtom);
   const value = currentQuestionId === questionId ? activeAnswer : ''
 
-  return <div className='mx-auto my-4 font-sans text-3xl'>
+  return <div className='mx-auto my-4 font-sans text-3xl' onClick={() => hiddenInputRef.current?.focus()}>
     <div className='my-2' onKeyDown={(e) => alert(e.key)}>
       {[...Array(MAX_CHARACTERS).keys()].map((i) => <Box key={questionId + '.' + i} value={value?.[i] ?? ''} characterId={i} />)}
     </div>
+    <input className='display-none' ref={hiddenInputRef} />
     <PlayAudioButton />
   </div>
 }
