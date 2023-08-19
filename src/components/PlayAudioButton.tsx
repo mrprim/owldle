@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import useCurrentQuestion from "../useCurrentQuestion"
 
 const PlayAudioButton = () => {
-  const { question, id } = useCurrentQuestion();
+  const { question } = useCurrentQuestion();
 
   const play = useCallback(async () => {
     const msg = new SpeechSynthesisUtterance(question)

@@ -7,6 +7,7 @@ import Answered from './Answered';
 import useSubmit from '../useSubmit';
 import YouWon from './YouWon';
 import questions from '../data/words.json'
+import Navbar from './Navbar';
 
 const useAttachKeyboardHandler = () => {
   const submit = useSubmit();
@@ -41,11 +42,20 @@ const App: FC = () => {
   if (questionId >= questions.length) return <YouWon />
 
   return (
-    <div className='text-center'>
-      <Answered/>
-      <AnswerInput questionId={questionId}/>
-      <Keyboard />
-    </div>
+    <>
+      <Navbar />
+      <div className='text-center flex flex-col justify-between'>
+        <div className="flex-0">
+          <Answered />
+        </div>
+        <div className="flex-0">
+          <AnswerInput questionId={questionId} />
+        </div>
+        <div className="flex-0">
+          <Keyboard />
+        </div>
+      </div>
+    </>
   )
 }
 
