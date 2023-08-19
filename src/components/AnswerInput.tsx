@@ -51,7 +51,7 @@ const AnswerInput: FC<Props> = ({ questionId = 0 }) => {
     <div className='my-2' onKeyDown={(e) => alert(e.key)}>
       {[...Array(MAX_CHARACTERS).keys()].map((i) => <Box key={questionId + '.' + i} value={value?.[i] ?? ''} characterId={i} />)}
     </div>
-    <input className='display-none' ref={hiddenInputRef} />
+    <input className='hidden' ref={hiddenInputRef} />
     <PlayAudioButton />
   </div>
 }
