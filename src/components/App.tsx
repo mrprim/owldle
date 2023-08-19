@@ -4,9 +4,12 @@ import useQuestions from '../hooks/useQuestions';
 import GamePage from './GamePage';
 import Navbar from './Navbar';
 import YouWon from './YouWon';
-import SettingsModal from './SettingsModal';
+import useScreen from '../hooks/useScreen';
+import ReviewPage from './ReviewPage';
+import SettingsPage from './SettingsPage';
 
 const App: FC = () => {
+  const [screen] = useScreen();
   const questions = useQuestions();
   const { id: questionId } = useCurrentQuestion();
 
@@ -15,8 +18,9 @@ const App: FC = () => {
   return (
     <div className="flex flex-col min-h-full">
       <Navbar className="flex-0" />
-      <GamePage className="flex-1" />
-      {/* <SettingsModal /> */}
+      {screen === 'home' && <GamePage className="flex-1" />}
+      {screen === 'review' && <ReviewPage className="flex-1" />}
+      {screen === 'settings' && <SettingsPage className="flex-1" />}
     </div>
   )
 }

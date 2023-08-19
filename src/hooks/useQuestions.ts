@@ -1,9 +1,8 @@
-import questions from '../data/words.json';
+import useTest from './useTest';
 
 const useQuestions = () => {
-
-
-  return questions;
+  const test = useTest();
+  return test.words;
 }
 
 export default useQuestions;
