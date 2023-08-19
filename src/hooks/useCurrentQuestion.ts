@@ -1,11 +1,12 @@
 import { atom, useAtom } from 'jotai';
-import questions from './data/words.json';
 import { useMemo } from 'react';
+import useQuestions from './useQuestions';
 
 const currentQuestionIdAtom = atom(0);
 
 const useCurrentQuestion = () => {
-  const [ id ] = useAtom(currentQuestionIdAtom);
+  const [id] = useAtom(currentQuestionIdAtom);
+  const questions = useQuestions();
 
   return useMemo(() => ({
     id,

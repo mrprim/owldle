@@ -1,10 +1,10 @@
-import { FC, useRef } from "react";
+import { FC } from "react";
 import { useAtomValue } from "jotai";
-import { answerAtom } from "../useAnswerActions";
-import { MAX_CHARACTERS } from "../data/settings";
-import useCurrentQuestion from "../useCurrentQuestion";
-import { errorStateAtom } from "../useSubmit";
-import PlayAudioButton from "./PlayAudioButton";
+import { answerAtom } from "../hooks/useAnswerActions";
+import useCurrentQuestion from "../hooks/useCurrentQuestion";
+import { errorStateAtom } from "../hooks/useSubmit";
+import useSettings from "../hooks/useSettings";
+import setCase from "../utils/setCase";
 
 interface Props { questionId: number };
 interface BoxProps { value: string, characterId: number };
@@ -22,9 +22,11 @@ const getBgColor = (value: string, errorState: boolean, incorrect: boolean) => {
 };
 
 const Box: FC<BoxProps> = ({ value, characterId }) => {
+  const { capitalization } = useSettings();
   const { question } = useCurrentQuestion();
   const errorState = useAtomValue(errorStateAtom);
   const incorrect = question[characterId] !== value;
+  const label = setCase(value, capitalization)
 
   const borderColorName = getBorderColor(value, errorState);
 
@@ -32,27 +34,28 @@ const Box: FC<BoxProps> = ({ value, characterId }) => {
 
 return <div className={`
   border-2 ${borderColorName} ${bgColor}
-  w-14 h-14 mx-2
+  w-8 md:w-14 h-8 md:h-14
+  mx-px md:mx-2
   inline-flex items-center align-middle
+  font-sans
+  text-xl md:text-3xl
   text-center`}>
     <p className="flex-grow font-bold">
-      {value}
+    {label}
     </p>
 </div>
 }
 
 const AnswerInput: FC<Props> = ({ questionId = 0 }) => {
-  const hiddenInputRef = useRef<HTMLInputElement | null>(null);
+  const { maxCharacters } = useSettings();
   const { id: currentQuestionId } = useCurrentQuestion();
   const activeAnswer = useAtomValue(answerAtom);
   const value = currentQuestionId === questionId ? activeAnswer : ''
 
-  return <div className='mx-auto my-4 font-sans text-3xl' onClick={() => hiddenInputRef.current?.focus()}>
+  return <div className='mx-auto my-4'>
     <div className='my-2' onKeyDown={(e) => alert(e.key)}>
-      {[...Array(MAX_CHARACTERS).keys()].map((i) => <Box key={questionId + '.' + i} value={value?.[i] ?? ''} characterId={i} />)}
+      {[...Array(maxCharacters).keys()].map((i) => <Box key={questionId + '.' + i} value={value?.[i] ?? ''} characterId={i} />)}
     </div>
-    <input className='hidden' ref={hiddenInputRef} />
-    <PlayAudioButton />
   </div>
 }
 

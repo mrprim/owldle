@@ -1,41 +1,16 @@
-import { FC, useCallback, useEffect } from 'react'
-import AnswerInput from './AnswerInput'
-import useAnswerActions from '../useAnswerActions';
-import Keyboard from './Keyboard';
-import useCurrentQuestion from '../useCurrentQuestion';
+import { FC } from 'react';
+import useAttachKeyboardHandler from '../hooks/useAttachKeyboardHandler';
+import useCurrentQuestion from '../hooks/useCurrentQuestion';
+import AnswerInput from './AnswerInput';
 import Answered from './Answered';
-import useSubmit from '../useSubmit';
-import YouWon from './YouWon';
-import questions from '../data/words.json'
+import Keyboard from './Keyboard';
 import Navbar from './Navbar';
-
-const useAttachKeyboardHandler = () => {
-  const submit = useSubmit();
-  const { addLetter, removeLetter } = useAnswerActions();
-
-  const handler = useCallback((e: KeyboardEvent): void => {
-    if(e.altKey || e.ctrlKey) return;
-    if(e.key !== 'Backspace' && e.key !== 'Enter' && !e.key.match(/^[A-Z]$/i)) return;
-    if(e.key === 'Backspace') {
-      removeLetter();
-    } else if (e.key === 'Enter') {
-      submit();
-    } else {
-      addLetter(e.key);
-    }
-    e.preventDefault();
-
-  }, [removeLetter, addLetter, submit]);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handler)
-    return () => {
-      window.removeEventListener('keydown', handler);
-    }
-  }, [handler]);
-}
+import YouWon from './YouWon';
+import useQuestions from '../hooks/useQuestions';
+import QuestionHeader from './QuestionHeader';
 
 const App: FC = () => {
+  const questions = useQuestions();
   const { id: questionId } = useCurrentQuestion();
   useAttachKeyboardHandler();
 
@@ -49,6 +24,7 @@ const App: FC = () => {
           <Answered />
         </div>
         <div className="flex-0">
+          <QuestionHeader questionId={questionId} />
           <AnswerInput questionId={questionId} />
         </div>
         <div className="flex-0">

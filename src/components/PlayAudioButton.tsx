@@ -1,8 +1,11 @@
-import { useCallback, useEffect } from "react";
-import useCurrentQuestion from "../useCurrentQuestion"
+import { FC, useCallback, useEffect } from "react";
+import useQuestions from "../hooks/useQuestions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 
-const PlayAudioButton = () => {
-  const { question } = useCurrentQuestion();
+const PlayAudioButton: FC<{ questionId: number }> = ({ questionId }) => {
+  const questions = useQuestions();
+  const question = questions[questionId];
 
   const play = useCallback(async () => {
     const msg = new SpeechSynthesisUtterance(question)
@@ -18,7 +21,9 @@ const PlayAudioButton = () => {
     }
   }, [question, play]);
 
-  return <button onClick={() => play()}>Play</button>
+  return <span onClick={() => play()} className='cursor-pointer'>
+    <FontAwesomeIcon icon={faPlayCircle} size='2xl' />
+  </span>
 }
 
 export default PlayAudioButton;

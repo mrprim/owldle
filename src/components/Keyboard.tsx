@@ -1,12 +1,11 @@
 import { FC } from "react";
-import useAnswerActions from "../useAnswerActions";
-import useSubmit from "../useSubmit";
+import useAnswerActions from "../hooks/useAnswerActions";
+import useSubmit from "../hooks/useSubmit";
+import useSettings, { KeyboardLayout, KeyboardStyle } from "../hooks/useSettings";
+import setCase from "../utils/setCase";
 
-const DEFAULT_VIEW: Layout = 'alpha';
 
-type Layout = 'qwerty' | 'alpha';
-
-const LAYOUTS: Record<Layout, string[]> = {
+const LAYOUTS: Record<KeyboardLayout, string[]> = {
   qwerty: [
     'QWERTYUIOP',
     'ASDFGHJKL',
@@ -14,56 +13,105 @@ const LAYOUTS: Record<Layout, string[]> = {
   ],
   alpha: [
     'ABCDEFGHIJ',
-    'KLMNOPQR',
-    'STUVWXYZ',
+    'KLMNOPQRST',
+    'UVWXYZ',
   ]
 };
 
 type KeyProps = {
   value: string;
-  label?: string;
-  size?: 'md' | 'lg';
-  textSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+  characterIndex: number;
+  rowIndex: number;
 }
 
-const Key: FC<KeyProps> = ({ label, size = 'md', textSize = 'xl', value }) => {
+const EnterKey = () => {
   const submit = useSubmit();
-  const { removeLetter, addLetter } = useAnswerActions();
-  const widthClass = size === 'lg' ? 'w-20' : 'w-12';
 
-return <div className={`
+  return <div className={`
   bg-slate-300
-  text-${textSize}
-  ${widthClass} h-14 mx-1
+  text-md md:text-xl
+  md:w-20 w-16
+  h-14 m-1
+  inline-flex items-center align-middle
+  rounded-md cursor-pointer
+  text-center`}
+    onClick={() => {
+      submit();
+    }}>
+    <p className="flex-grow font-bold">
+      Enter
+    </p>
+  </div>
+}
+
+const BackspaceKey = () => {
+  const { removeLetter } = useAnswerActions();
+
+  return <div className={`
+  bg-slate-300
+  text-xl
+  md:w-20 w-16
+  h-14 m-1
+  inline-flex items-center align-middle
+  rounded-md cursor-pointer
+  text-center`}
+    onClick={() => {
+      removeLetter();
+    }}>
+    <p className="flex-grow font-bold">
+      ⌫
+    </p>
+  </div>
+}
+
+const getKeyboardStyle = (characterIndex: number, keyboardStyle: KeyboardStyle) => {
+  if (keyboardStyle === 'gray') return 'bg-slate-300';
+  const colors = ['red', 'emerald', 'yellow', 'purple', 'sky'];
+  const color = colors[characterIndex % colors.length];
+
+  return `bg-${color}-200`;
+
+}
+
+const DontUse = () => <div className='bg-red-200 bg-emerald-200 bg-yellow-200 bg-purple-200 bg-sky-200' />
+
+const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex }) => {
+  const { capitalization, keyboardStyle } = useSettings();
+  const { removeLetter, addLetter } = useAnswerActions();
+  const label = setCase(value, capitalization);
+  const bgColor = getKeyboardStyle(characterIndex + rowIndex, keyboardStyle);
+
+  return <div className={`
+  ${bgColor}
+  text-xl
+  md:w-12 w-7 h-14 mx-1
   inline-flex items-center align-middle
   rounded-md cursor-pointer
   text-center`} onClick={() => {
-    if(value.length === 1) {
+    if (value.length === 1) {
       addLetter(value)
     } else if (value === 'Backspace') {
       removeLetter();
-    } else {
-      submit();
-    }
-  }}>
+      }
+    }}>
     <p className="flex-grow font-bold">
-      {label ?? value}
+      {label}
     </p>
-</div>
+  </div>
 }
 
 type RowProps = {
   index: number;
-  type?: Layout;
 }
 
-const Row: FC<RowProps> = ({ index, type = DEFAULT_VIEW }) => {
-  const charList = LAYOUTS[type][index];
+const Row: FC<RowProps> = ({ index }) => {
+  const { keyboardLayout } = useSettings();
+  const charList = LAYOUTS[keyboardLayout][index];
   return (
     <div className='my-2'>
-      {index === 2 && <Key value='Enter' textSize="lg" size="lg" />}
-      {charList.split('').map((char: string) => <Key key={char} value={char} /> )}
-      {index === 2 && <Key label={'⌫'} value='Backspace' textSize="lg" size="lg" />}
+      {index === 2 && <EnterKey />}
+      {charList.split('').map((char: string, i) => <Key key={char} value={char} characterIndex={i} rowIndex={index} />)}
+      {index === 2 && <BackspaceKey />}
     </div>
   )
 }

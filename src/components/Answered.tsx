@@ -1,6 +1,6 @@
 import { FC } from "react";
-import useCurrentQuestion from "../useCurrentQuestion";
-import questions from '../data/words.json';
+import useCurrentQuestion from "../hooks/useCurrentQuestion";
+import useQuestions from "../hooks/useQuestions";
 
 const Box: FC<{value: string}> = ({ value }) => {
 return <div className={`
@@ -20,6 +20,7 @@ const Word: FC<{value: string}> = ({ value }) =>
   </div>
 
 const Answered: FC = () => {
+  const questions = useQuestions();
   const { id: questionId } = useCurrentQuestion();
   const answered = questions.slice(0, questionId);
 
