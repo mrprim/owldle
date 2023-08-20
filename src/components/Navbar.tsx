@@ -16,9 +16,12 @@ const Navbar: FC<{ className?: string }> = ({ className }) => {
           </button>
         </div>
 
-        <div className="flex-1 text-2xl font-sans font-extrabold items-start">
-          OWLDLE
+        <div className="flex-1 text-center">
+          <button className="text-2xl font-sans font-extrabold" onClick={() => setScreen('home')}>
+            OWLDLE
+          </button>
         </div>
+
         <div className="flex-1 flex justify-end">
           <button className='mx-2' onClick={() => setScreen((s) => s === 'review' ? 'home' : 'review')}>
             <FontAwesomeIcon icon={faListUl} size='2xl' />
