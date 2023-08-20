@@ -2,6 +2,7 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 import useAnswerActions, { answerAtom } from "./useAnswerActions";
 import useCurrentQuestion, { currentQuestionIdAtom } from "./useCurrentQuestion";
 import { useCallback } from "react";
+import say from "../utils/say";
 
 type SubmitFunction = () => void;
 
@@ -22,19 +23,14 @@ const useSubmit = (): SubmitFunction => {
   return useCallback(async () => {
     setIsSubmitting(true);
     if (question === answer) {
-      const msg = new SpeechSynthesisUtterance(pronounce(question) + ' --- ' + question)
-      msg.rate = .65
-
-      await new Promise(function (resolve) {
-        msg.onend = resolve;
-        window.speechSynthesis.speak(msg)
-      });
+      await say(pronounce(question) + ' --- ' + question)
 
       clear();
       setCurrentQuestion((id) => id + 1);
       setErrorState(false);
     } else {
       setErrorState(true);
+      say(question)
     }
     setIsSubmitting(false);
   }, [question, answer, clear, setCurrentQuestion])

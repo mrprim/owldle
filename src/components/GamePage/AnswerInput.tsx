@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useAtomValue } from "jotai";
 import { answerAtom } from "../../hooks/useAnswerActions";
 import useCurrentQuestion from "../../hooks/useCurrentQuestion";
-import { errorStateAtom } from "../../hooks/useSubmit";
+import { errorStateAtom, isSubmittingAtom } from "../../hooks/useSubmit";
 import useSettings from "../../hooks/useSettings";
 import setCase from "../../utils/setCase";
 
@@ -15,7 +15,8 @@ const getBorderColor = (value: string, errorState: boolean) => {
   return 'border-gray-300';
 };
 
-const getBgColor = (value: string, errorState: boolean, incorrect: boolean) => {
+const getBgColor = (value: string, errorState: boolean, incorrect: boolean, isSubmitting: boolean) => {
+  if (isSubmitting && !errorState) return 'bg-emerald-300';
   if (errorState && !value) return 'bg-gray-200';
   if (errorState && incorrect) return 'bg-red-300';
   return '';
@@ -27,10 +28,11 @@ const Box: FC<BoxProps> = ({ value, characterId }) => {
   const errorState = useAtomValue(errorStateAtom);
   const incorrect = question[characterId] !== value;
   const label = setCase(value, capitalization)
+  const isSubmitting = useAtomValue(isSubmittingAtom);
 
   const borderColorName = getBorderColor(value, errorState);
 
-  const bgColor = getBgColor(value, errorState, incorrect)
+  const bgColor = getBgColor(value, errorState, incorrect, isSubmitting)
 
   return <div className={`
   border-2 ${borderColorName} ${bgColor}
