@@ -22,7 +22,7 @@ const Word: FC<{value: string}> = ({ value }) =>
 const Answered: FC = () => {
   const questions = useQuestions();
   const { id: questionId } = useCurrentQuestion();
-  const answered = questions.slice(0, questionId);
+  const answered = questions.slice(0, questionId ?? -1);
 
   return (
     <>
