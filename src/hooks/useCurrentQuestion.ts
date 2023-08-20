@@ -2,7 +2,7 @@ import { atom, useAtom } from 'jotai';
 import { useMemo } from 'react';
 import useQuestions from './useQuestions';
 
-const currentQuestionIdAtom = atom(0);
+const currentQuestionIdAtom = atom<number | null>(null);
 
 const useCurrentQuestion = () => {
   const [id] = useAtom(currentQuestionIdAtom);
@@ -10,7 +10,7 @@ const useCurrentQuestion = () => {
 
   return useMemo(() => ({
     id,
-    question: questions[id],
+    question: questions[id ?? -1],
   }), [id])
 }
 

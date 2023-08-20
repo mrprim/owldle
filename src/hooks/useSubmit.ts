@@ -30,7 +30,7 @@ const useSubmit = (): SubmitFunction => {
       clear();
       setErrorState(false);
       setShowAnswer(false);
-      setCurrentQuestion((id) => id + 1);
+      setCurrentQuestion((id) => id !== null ? id + 1 : 0);
     } else {
       setErrorState(true);
       say(question)
