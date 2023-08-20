@@ -37,7 +37,6 @@ const EnterKey = () => {
   rounded-md cursor-pointer
   text-center`}
     onClick={() => {
-      navigator.vibrate(100);
       submit();
     }}>
     <p className="flex-grow font-bold">
@@ -59,7 +58,6 @@ const BackspaceKey = () => {
   rounded-md cursor-pointer
   text-center`}
     onClick={() => {
-      navigator.vibrate(100);
       removeLetter();
     }}>
     <p className="flex-grow font-bold">
@@ -91,7 +89,6 @@ const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex }) => {
   inline-flex items-center align-middle
   rounded-md cursor-pointer
   text-center`} onClick={() => {
-      navigator.vibrate(100);
       addLetter(value)
     }}>
     <p className="flex-grow font-bold">
