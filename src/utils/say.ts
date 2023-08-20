@@ -14,4 +14,5 @@ const say = async (text: string, mutator?: UtteranceMutator) => {
   });
 }
 
+export type { UtteranceMutator };
 export default say;

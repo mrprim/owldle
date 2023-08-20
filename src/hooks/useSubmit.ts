@@ -2,8 +2,8 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 import useAnswerActions, { answerAtom } from "./useAnswerActions";
 import useCurrentQuestion, { currentQuestionIdAtom } from "./useCurrentQuestion";
 import { useCallback } from "react";
-import say from "../utils/say";
 import useShowAnswer from "./useShowAnswer";
+import useSpeech from "./useSpeech";
 
 type SubmitFunction = () => void;
 
@@ -13,6 +13,7 @@ const errorStateAtom = atom(false);
 const pronounce = (word: string): string => [...word].join(' - ');
 
 const useSubmit = (): SubmitFunction => {
+  const { say } = useSpeech();
   const setErrorState = useSetAtom(errorStateAtom);
   const [_, setShowAnswer] = useShowAnswer();
 

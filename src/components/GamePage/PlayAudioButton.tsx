@@ -2,17 +2,15 @@ import { FC, useCallback, useEffect, useState } from "react";
 import useQuestions from "../../hooks/useQuestions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeHigh, faVolumeOff } from "@fortawesome/free-solid-svg-icons";
-import say from "../../utils/say";
+import useSpeech from "../../hooks/useSpeech";
 
 const PlayAudioButton: FC<{ questionId: number }> = ({ questionId }) => {
   const questions = useQuestions();
   const question = questions[questionId];
-  const [playing, setPlaying] = useState(false);
+  const { isSpeaking, say } = useSpeech()
 
   const play = useCallback(async () => {
-    setPlaying(true);
     await say(question);
-    setPlaying(false);
   }, [question])
 
   useEffect(() => {
@@ -22,10 +20,10 @@ const PlayAudioButton: FC<{ questionId: number }> = ({ questionId }) => {
     }
   }, [question, play]);
 
-  const iconColor = playing ? 'text-sky-600' : '';
+  const iconColor = isSpeaking ? 'text-sky-600' : '';
 
   return <span onClick={() => play()} className={`cursor-pointer ${iconColor}`}>
-    <FontAwesomeIcon icon={playing ? faVolumeHigh : faVolumeOff} size='2xl' />
+    <FontAwesomeIcon icon={isSpeaking ? faVolumeHigh : faVolumeOff} size='2xl' />
   </span>
 }
 
