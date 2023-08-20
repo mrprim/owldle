@@ -9,21 +9,21 @@ const Navbar: FC<{ className?: string }> = ({ className }) => {
 
   return (
     <nav className={`${className ?? ''} bg-white border-gray-200 dark:bg-gray-900 text-gray-800 dark:text-white`}>
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-        <div className="flex-0">
+      <div className="max-w-screen-xl flex items-center mx-auto p-4 text-center justify-center">
+        <div className="flex-1 flex justify-start">
           <button className='mx-2' onClick={() => setScreen('home')}>
             <FontAwesomeIcon icon={faKiwiBird} size='2xl' />
           </button>
         </div>
 
-        <div className="flex-0 text-2xl font-sans font-extrabold">
+        <div className="flex-1 text-2xl font-sans font-extrabold items-start">
           OWLDLE
         </div>
-        <div className="flex-0 flex items-end">
-          <button className='mx-2' onClick={() => setScreen('review')}>
+        <div className="flex-1 flex justify-end">
+          <button className='mx-2' onClick={() => setScreen((s) => s === 'review' ? 'home' : 'review')}>
             <FontAwesomeIcon icon={faListUl} size='2xl' />
           </button>
-          <button className='mx-2' onClick={() => setScreen('settings')}>
+          <button className='mx-2 hidden' onClick={() => setScreen((s) => s === 'settings' ? 'home' : 'settings')}>
             <FontAwesomeIcon icon={faGear} size='2xl' />
           </button>
         </div>
