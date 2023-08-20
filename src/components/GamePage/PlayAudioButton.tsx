@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import useQuestions from "../../hooks/useQuestions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlayCircle, faVolumeHigh, faVolumeLow, faVolumeOff } from "@fortawesome/free-solid-svg-icons";
+import { faVolumeHigh, faVolumeOff } from "@fortawesome/free-solid-svg-icons";
 import say from "../../utils/say";
 
 const PlayAudioButton: FC<{ questionId: number }> = ({ questionId }) => {

@@ -3,6 +3,7 @@ import useAnswerActions, { answerAtom } from "./useAnswerActions";
 import useCurrentQuestion, { currentQuestionIdAtom } from "./useCurrentQuestion";
 import { useCallback } from "react";
 import say from "../utils/say";
+import useShowAnswer from "./useShowAnswer";
 
 type SubmitFunction = () => void;
 
@@ -13,6 +14,7 @@ const pronounce = (word: string): string => [...word].join(' - ');
 
 const useSubmit = (): SubmitFunction => {
   const setErrorState = useSetAtom(errorStateAtom);
+  const [_, setShowAnswer] = useShowAnswer();
 
   const setCurrentQuestion = useSetAtom(currentQuestionIdAtom);
   const setIsSubmitting = useSetAtom(isSubmittingAtom);
@@ -26,8 +28,9 @@ const useSubmit = (): SubmitFunction => {
       await say(pronounce(question) + ' --- ' + question)
 
       clear();
-      setCurrentQuestion((id) => id + 1);
       setErrorState(false);
+      setShowAnswer(false);
+      setCurrentQuestion((id) => id + 1);
     } else {
       setErrorState(true);
       say(question)

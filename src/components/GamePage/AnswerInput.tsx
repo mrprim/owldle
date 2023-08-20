@@ -5,6 +5,7 @@ import useCurrentQuestion from "../../hooks/useCurrentQuestion";
 import { errorStateAtom, isSubmittingAtom } from "../../hooks/useSubmit";
 import useSettings from "../../hooks/useSettings";
 import setCase from "../../utils/setCase";
+import useShowAnswer from "../../hooks/useShowAnswer";
 
 interface Props { questionId: number };
 interface BoxProps { value: string, characterId: number };
@@ -23,19 +24,23 @@ const getBgColor = (value: string, errorState: boolean, incorrect: boolean, isSu
 };
 
 const Box: FC<BoxProps> = ({ value, characterId }) => {
+  const [showAnswer] = useShowAnswer();
   const { capitalization } = useSettings();
   const { question } = useCurrentQuestion();
   const errorState = useAtomValue(errorStateAtom);
   const incorrect = question[characterId] !== value;
-  const label = setCase(value, capitalization)
+  const label = setCase(showAnswer && !value ? question[characterId] ?? '' : value, capitalization)
   const isSubmitting = useAtomValue(isSubmittingAtom);
 
   const borderColorName = getBorderColor(value, errorState);
 
   const bgColor = getBgColor(value, errorState, incorrect, isSubmitting)
 
+
+  const letterColor = (showAnswer && !value) ? 'text-gray-300' : 'text-black';
+
   return <div className={`
-  border-2 ${borderColorName} ${bgColor}
+  border-2 ${borderColorName} ${bgColor} ${letterColor}
   w-8 md:w-14 h-8 md:h-14
   mx-px md:mx-2
   inline-flex items-center align-middle
