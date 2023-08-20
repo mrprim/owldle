@@ -1,19 +1,12 @@
 import { FC } from 'react';
-import useCurrentQuestion from '../hooks/useCurrentQuestion';
-import useQuestions from '../hooks/useQuestions';
+import useScreen from '../hooks/useScreen';
 import GamePage from './GamePage';
 import Navbar from './Navbar';
-import YouWon from './YouWon';
-import useScreen from '../hooks/useScreen';
 import ReviewPage from './ReviewPage';
 import SettingsPage from './SettingsPage';
 
 const App: FC = () => {
   const [screen] = useScreen();
-  const questions = useQuestions();
-  const { id: questionId } = useCurrentQuestion();
-
-  if (questionId >= questions.length) return <YouWon />
 
   return (
     <div className="flex flex-col min-h-full">
