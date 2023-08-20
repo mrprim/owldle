@@ -37,9 +37,10 @@ const EnterKey = () => {
   rounded-md cursor-pointer
   text-center`}
     onClick={() => {
+      navigator.vibrate(100);
       submit();
     }}>
-    <p className="flex-grow font-bold">
+    <p className="flex-grow font-semibold">
       Enter
     </p>
   </div>
@@ -60,7 +61,7 @@ const BackspaceKey = () => {
     onClick={() => {
       removeLetter();
     }}>
-    <p className="flex-grow font-bold">
+    <p className="flex-grow font-semibold">
       ⌫
     </p>
   </div>
@@ -82,7 +83,6 @@ const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex }) => {
   const bgColor = getKeyboardStyle(characterIndex + rowIndex, keyboardStyle);
 
   return <div className={`
-  font-sans
   ${bgColor}
   text-xl
   md:w-12 w-7 h-14 mx-1
@@ -91,7 +91,7 @@ const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex }) => {
   text-center`} onClick={() => {
       addLetter(value)
     }}>
-    <p className="flex-grow font-bold">
+    <p className="flex-grow font-semibold">
       {label}
     </p>
   </div>
