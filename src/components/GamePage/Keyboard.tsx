@@ -37,7 +37,6 @@ const EnterKey = () => {
   rounded-md cursor-pointer
   text-center`}
     onClick={() => {
-      navigator.vibrate(100);
       submit();
     }}>
     <p className="flex-grow font-semibold">
