@@ -1,6 +1,9 @@
+
 type UtteranceMutator = (msg: SpeechSynthesisUtterance) => void;
 
 const say = async (text: string, mutator?: UtteranceMutator) => {
+
+  // View a word
   const msg = new SpeechSynthesisUtterance(text)
   msg.rate = .65
 

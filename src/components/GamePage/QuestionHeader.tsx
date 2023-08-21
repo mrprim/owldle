@@ -11,7 +11,7 @@ const ShowAnswer = () => {
 
   return <div>
     <button className={`${className} mt-4`} onClick={() => setShowAnswer((s) => !s)}>
-      {showAnswer ? question : 'Show answer'}
+      {showAnswer ? question.spelling : 'Show answer'}
     </button>
   </div>
 

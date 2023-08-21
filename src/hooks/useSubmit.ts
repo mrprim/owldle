@@ -25,8 +25,8 @@ const useSubmit = (): SubmitFunction => {
 
   return useCallback(async () => {
     setIsSubmitting(true);
-    if (question === answer) {
-      await say(pronounce(question) + ' --- ' + question)
+    if (question.spelling === answer) {
+      await say(pronounce(question.pronunciation ?? question.spelling) + ' --- ' + question)
 
       clear();
       setErrorState(false);
@@ -34,7 +34,7 @@ const useSubmit = (): SubmitFunction => {
       setCurrentQuestion((id) => id !== null ? id + 1 : 0);
     } else {
       setErrorState(true);
-      say(question)
+      say(question.pronunciation ?? question.spelling)
     }
     setIsSubmitting(false);
   }, [question, answer, clear, setCurrentQuestion])

@@ -28,8 +28,8 @@ const Box: FC<BoxProps> = ({ value, characterId }) => {
   const { capitalization } = useSettings();
   const { question } = useCurrentQuestion();
   const errorState = useAtomValue(errorStateAtom);
-  const incorrect = question[characterId] !== value;
-  const label = setCase(showAnswer && !value ? question[characterId] ?? '' : value, capitalization)
+  const incorrect = question.spelling[characterId] !== value;
+  const label = setCase(showAnswer && !value ? question.spelling[characterId] ?? '' : value, capitalization)
   const isSubmitting = useAtomValue(isSubmittingAtom);
 
   const borderColorName = getBorderColor(value, errorState);

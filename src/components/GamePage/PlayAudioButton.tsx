@@ -10,7 +10,7 @@ const PlayAudioButton: FC<{ questionId: number }> = ({ questionId }) => {
   const { isSpeaking, say } = useSpeech()
 
   const play = useCallback(async () => {
-    await say(question);
+    await say(question.pronunciation ?? question.spelling);
   }, [question])
 
   useEffect(() => {
