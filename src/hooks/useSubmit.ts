@@ -10,7 +10,7 @@ type SubmitFunction = () => void;
 const isSubmittingAtom = atom(false);
 const errorStateAtom = atom(false);
 
-const pronounce = (word: string): string => [...word].join(' - ');
+const pronounce = (word: string): string => [...word].map((c) => c === 'A' ? 'EH' : c).join(' -- ');
 
 const useSubmit = (): SubmitFunction => {
   const { say } = useSpeech();
@@ -26,7 +26,7 @@ const useSubmit = (): SubmitFunction => {
   return useCallback(async () => {
     setIsSubmitting(true);
     if (question.spelling === answer) {
-      await say(pronounce(question.pronunciation ?? question.spelling) + ' --- ' + question)
+      await say('--' + pronounce(question.pronunciation ?? question.spelling) + ' --- ' + (question.pronunciation ?? question.spelling))
 
       clear();
       setErrorState(false);
