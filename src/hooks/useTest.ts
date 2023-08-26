@@ -1,7 +1,7 @@
-import test from '../data/words.json';
+import test from '../data/fifth.4.json';
 
-const useTest = () => {
-  return test.fifth;
+const useTest = (): Test => {
+  return test;
 }
 
 export default useTest;
