@@ -1,14 +1,15 @@
 import { FC } from "react";
 import { useAtomValue } from "jotai";
 import { answerAtom } from "../../hooks/useAnswerActions";
-import useCurrentQuestion from "../../hooks/useCurrentQuestion";
 import { errorStateAtom, isSubmittingAtom } from "../../hooks/useSubmit";
 import useSettings from "../../hooks/useSettings";
 import setCase from "../../utils/setCase";
 import useShowAnswer from "../../hooks/useShowAnswer";
+import { observer } from "mobx-react-lite";
+import store from "../../store";
 
 interface Props { questionId: number };
-interface BoxProps { value: string, characterId: number };
+interface BoxProps { value: string, characterId: number, word: string };
 
 const getBorderColor = (value: string, errorState: boolean) => {
   if (errorState) return 'border-red-500';
@@ -23,13 +24,12 @@ const getBgColor = (value: string, errorState: boolean, incorrect: boolean, isSu
   return '';
 };
 
-const Box: FC<BoxProps> = ({ value, characterId }) => {
+const Box: FC<BoxProps> = ({ value, characterId, word }) => {
   const [showAnswer] = useShowAnswer();
   const { capitalization } = useSettings();
-  const { question } = useCurrentQuestion();
   const errorState = useAtomValue(errorStateAtom);
-  const incorrect = question.spelling[characterId] !== value;
-  const label = setCase(showAnswer && !value ? question.spelling[characterId] ?? '' : value, capitalization)
+  const incorrect = word[characterId] !== value;
+  const label = setCase(showAnswer && !value ? word?.[characterId] ?? '' : value, capitalization)
   const isSubmitting = useAtomValue(isSubmittingAtom);
 
   const borderColorName = getBorderColor(value, errorState);
@@ -53,17 +53,16 @@ const Box: FC<BoxProps> = ({ value, characterId }) => {
   </div>
 }
 
-const AnswerInput: FC<Props> = ({ questionId = 0 }) => {
+const AnswerInput: FC<Props> = observer(({ questionId = 0 }) => {
   const { maxCharacters } = useSettings();
-  const { id: currentQuestionId } = useCurrentQuestion();
-  const activeAnswer = useAtomValue(answerAtom);
-  const value = currentQuestionId === questionId ? activeAnswer : ''
+  const value = useAtomValue(answerAtom);
+  const word = store.getQuestion(questionId)?.spelling ?? '';
 
   return <div className='mx-auto my-4'>
     <div className='my-2' onKeyDown={(e) => alert(e.key)}>
-      {[...Array(maxCharacters).keys()].map((i) => <Box key={questionId + '.' + i} value={value?.[i] ?? ''} characterId={i} />)}
+      {[...Array(maxCharacters).keys()].map((i) => <Box key={questionId + '.' + i} value={value?.[i] ?? ''} characterId={i} word={word} />)}
     </div>
   </div>
-}
+});
 
 export default AnswerInput;

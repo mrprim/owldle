@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import useAttachKeyboardHandler from '../../hooks/useAttachKeyboardHandler';
-import useCurrentQuestion from '../../hooks/useCurrentQuestion';
 import AnswerInput from './AnswerInput';
 import Keyboard from './Keyboard';
 import QuestionHeader from './QuestionHeader';
+import { observer } from 'mobx-react-lite';
+import store from '../../store';
 
-const InProgressGamePage: FC<{ className?: string }> = ({ className }) => {
-  const { id: questionId } = useCurrentQuestion();
+const InProgressGamePage: FC<{ className?: string }> = observer(({ className }) => {
+  const questionId = store.currentQuestionId;
 
   useAttachKeyboardHandler();
 
@@ -28,7 +29,6 @@ const InProgressGamePage: FC<{ className?: string }> = ({ className }) => {
       </div>
     </div >
   )
-
-}
+});
 
 export default InProgressGamePage;
