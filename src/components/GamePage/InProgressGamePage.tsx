@@ -7,11 +7,11 @@ import { observer } from 'mobx-react-lite';
 import store from '../../store';
 
 const InProgressGamePage: FC<{ className?: string }> = observer(({ className }) => {
-  const questionId = store.currentQuestionId;
+  const wordId = store.gameStateStore.wordId;
 
   useAttachKeyboardHandler();
 
-  if (questionId === null) return null;
+  if (wordId === null) return null;
 
   return (
     <div className={`${className ?? ''} text-center flex flex-col justify-between`}>
@@ -20,8 +20,8 @@ const InProgressGamePage: FC<{ className?: string }> = observer(({ className }) 
       </div>
 
       <div className="flex-0" >
-        <QuestionHeader questionId={questionId} />
-        < AnswerInput questionId={questionId} />
+        <QuestionHeader wordId={wordId} />
+        < AnswerInput wordId={wordId} />
       </div>
 
       <div className="flex-0" >

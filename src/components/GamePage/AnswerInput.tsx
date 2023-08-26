@@ -1,40 +1,35 @@
 import { FC } from "react";
-import { useAtomValue } from "jotai";
-import { answerAtom } from "../../hooks/useAnswerActions";
-import { errorStateAtom, isSubmittingAtom } from "../../hooks/useSubmit";
 import useSettings from "../../hooks/useSettings";
 import setCase from "../../utils/setCase";
 import useShowAnswer from "../../hooks/useShowAnswer";
 import { observer } from "mobx-react-lite";
 import store from "../../store";
 
-interface Props { questionId: number };
-interface BoxProps { value: string, characterId: number, word: string };
+interface Props { wordId: number };
+interface BoxProps { value: string, characterId: number, word: string, isError: boolean, isSubmitting: boolean };
 
-const getBorderColor = (value: string, errorState: boolean) => {
-  if (errorState) return 'border-red-500';
+const getBorderColor = (value: string, isError: boolean) => {
+  if (isError) return 'border-red-500';
   if (value) return 'border-gray-800';
   return 'border-gray-300';
 };
 
-const getBgColor = (value: string, errorState: boolean, incorrect: boolean, isSubmitting: boolean) => {
-  if (isSubmitting && !errorState) return 'bg-emerald-300';
-  if (errorState && !value) return 'bg-gray-200';
-  if (errorState && incorrect) return 'bg-red-300';
+const getBgColor = (value: string, isError: boolean, incorrect: boolean, isSubmitting: boolean) => {
+  if (isSubmitting && !isError) return 'bg-emerald-300';
+  if (isError && !value) return 'bg-gray-200';
+  if (isError && incorrect) return 'bg-red-300';
   return '';
 };
 
-const Box: FC<BoxProps> = ({ value, characterId, word }) => {
+const Box: FC<BoxProps> = ({ value, characterId, word, isError, isSubmitting }) => {
   const [showAnswer] = useShowAnswer();
   const { capitalization } = useSettings();
-  const errorState = useAtomValue(errorStateAtom);
   const incorrect = word[characterId] !== value;
   const label = setCase(showAnswer && !value ? word?.[characterId] ?? '' : value, capitalization)
-  const isSubmitting = useAtomValue(isSubmittingAtom);
 
-  const borderColorName = getBorderColor(value, errorState);
+  const borderColorName = getBorderColor(value, isError);
 
-  const bgColor = getBgColor(value, errorState, incorrect, isSubmitting)
+  const bgColor = getBgColor(value, isError, incorrect, isSubmitting)
 
 
   const letterColor = (showAnswer && !value) ? 'text-gray-300' : 'text-black';
@@ -53,14 +48,14 @@ const Box: FC<BoxProps> = ({ value, characterId, word }) => {
   </div>
 }
 
-const AnswerInput: FC<Props> = observer(({ questionId = 0 }) => {
+const AnswerInput: FC<Props> = observer(({ wordId = 0 }) => {
   const { maxCharacters } = useSettings();
-  const value = useAtomValue(answerAtom);
-  const word = store.getQuestion(questionId)?.spelling ?? '';
+  const value = store.gameStateStore.answer;
+  const word = store.wordListStore.getWord(wordId)?.spelling ?? '';
 
   return <div className='mx-auto my-4'>
     <div className='my-2' onKeyDown={(e) => alert(e.key)}>
-      {[...Array(maxCharacters).keys()].map((i) => <Box key={questionId + '.' + i} value={value?.[i] ?? ''} characterId={i} word={word} />)}
+      {[...Array(maxCharacters).keys()].map((i) => <Box key={wordId + '.' + i} value={value?.[i] ?? ''} characterId={i} word={word} isError={store.gameStateStore.isError} isSubmitting={store.gameStateStore.isSubmitting} />)}
     </div>
   </div>
 });

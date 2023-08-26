@@ -1,16 +1,15 @@
 import { FC, useCallback, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeHigh, faVolumeOff } from "@fortawesome/free-solid-svg-icons";
-import useSpeech from "../../hooks/useSpeech";
 import { observer } from "mobx-react-lite";
 import store from "../../store";
 
-const PlayAudioButton: FC<{ questionId: number }> = observer(({ questionId }) => {
-  const question = store.getQuestion(questionId);
-  const { isSpeaking, say } = useSpeech()
+const PlayAudioButton: FC<{ wordId: number }> = observer(({ wordId }) => {
+  const question = store.wordListStore.getWord(wordId);
+  const isSpeaking = store.speechStore.isSpeaking;
 
   const play = useCallback(async () => {
-    await say(question?.pronunciation ?? question?.spelling ?? 'THIS WORD IS MISSING');
+    await store.speechStore.say(question?.pronunciation ?? question?.spelling ?? 'THIS WORD IS MISSING');
   }, [question]);
 
   useEffect(() => {

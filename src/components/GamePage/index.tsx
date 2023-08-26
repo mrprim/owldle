@@ -3,15 +3,15 @@ import StartPage from './StartPage';
 import InProgressGamePage from './InProgressGamePage';
 import VictoryPage from './VictoryPage';
 import { observer } from 'mobx-react-lite'
-import store from '../../store'
+import store from '../../store';
 
 const GamePage: FC<{ className?: string }> = observer(({ className }) => {
-  const questionId = store.currentQuestionId;
-  const questions = store.getTest()?.words;
+  const wordId = store.gameStateStore.wordId;
+  const words = store.wordListStore.getTest()?.words;
 
-  if (!questions) return null;
-  if (questionId == null) return <StartPage className={className} />
-  if (questionId >= questions.length) return <VictoryPage className={className} />
+  if (!words) return null;
+  if (wordId == null) return <StartPage className={className} />
+  if (wordId >= words.length) return <VictoryPage className={className} />
   return <InProgressGamePage className={className} />
 });
 

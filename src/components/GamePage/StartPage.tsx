@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import store from '../../store';
 import { observer } from 'mobx-react-lite';
+import store from '../../store';
 
 const StartPage: FC<{ className?: string }> = observer(({ className }) => {
-  const reset = () => store.setCurrentQuestion(0);
+  const reset = () => store.gameStateStore.setCurrentWord(0);
 
   return (
     <div className={`${className ?? ''} text-center flex flex-col justify-center`}>

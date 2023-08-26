@@ -1,8 +1,7 @@
 import { FC } from "react";
-import useAnswerActions from "../../hooks/useAnswerActions";
-import useSubmit from "../../hooks/useSubmit";
 import useSettings, { KeyboardLayout, KeyboardStyle } from "../../hooks/useSettings";
 import setCase from "../../utils/setCase";
+import store from "../../store";
 
 
 const LAYOUTS: Record<KeyboardLayout, string[]> = {
@@ -25,8 +24,6 @@ type KeyProps = {
 }
 
 const EnterKey = () => {
-  const submit = useSubmit();
-
   return <div className={`
   font-sans
   bg-slate-300
@@ -37,7 +34,7 @@ const EnterKey = () => {
   rounded-md cursor-pointer
   text-center`}
     onClick={() => {
-      submit();
+      store.gameStateStore.submit();
     }}>
     <p className="flex-grow font-semibold">
       Enter
@@ -46,8 +43,6 @@ const EnterKey = () => {
 }
 
 const BackspaceKey = () => {
-  const { removeLetter } = useAnswerActions();
-
   return <div className={`
   font-sans
   bg-slate-300
@@ -58,7 +53,7 @@ const BackspaceKey = () => {
   rounded-md cursor-pointer
   text-center`}
     onClick={() => {
-      removeLetter();
+      store.gameStateStore.removeLetterFromAnswer();
     }}>
     <p className="flex-grow font-semibold">
       ⌫
@@ -77,7 +72,6 @@ const getKeyboardStyle = (characterIndex: number, keyboardStyle: KeyboardStyle) 
 
 const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex }) => {
   const { capitalization, keyboardStyle } = useSettings();
-  const { addLetter } = useAnswerActions();
   const label = setCase(value, capitalization);
   const bgColor = getKeyboardStyle(characterIndex + rowIndex, keyboardStyle);
 
@@ -88,7 +82,7 @@ const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex }) => {
   inline-flex items-center align-middle
   rounded-md cursor-pointer
   text-center`} onClick={() => {
-      addLetter(value)
+    store.gameStateStore.addLetterToAnswer(value)
     }}>
     <p className="flex-grow font-semibold">
       {label}

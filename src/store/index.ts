@@ -1,58 +1,23 @@
 import { makeAutoObservable } from "mobx";
+import WordListsStore from "./wordListsStore";
+import GameStateStore from "./gameStateStore";
+import SpeechStore from "./speechStore";
 
-const pages = import.meta.glob('../data/*.json')
+class RootStore {
 
-const CURRENT_WEEK = 4;
-const CURRENT_GRADE = 5;
-
-type Word = {
-  spelling: string;
-  pronunciation?: string;
-}
-
-type Test = {
-  grade: number;
-  week: number;
-  rule: string;
-  subrule?: string;
-  advice: string;
-  words: Word[];
-}
-
-class Store {
-  currentQuestionId = null as null | number;
-  tests = [] as Test[];
+  gameStateStore: GameStateStore;
+  wordListStore: WordListsStore;
+  speechStore: SpeechStore;
 
   constructor() {
     makeAutoObservable(this);
-  }
-  add(test: Test) {
-    this.tests.push(test);
-  }
-  getTest() {
-    return this.tests.find((t) => t.week === CURRENT_WEEK && t.grade === CURRENT_GRADE)
-  }
-  getQuestion(question: number) {
-    return this.getTest()?.words?.[question];
-  }
-  setCurrentQuestion(questionId: number | null) {
-    this.currentQuestionId = questionId;
+    this.gameStateStore = new GameStateStore(this);
+    this.wordListStore = new WordListsStore(this);
+    this.speechStore = new SpeechStore(this);
   }
 }
 
-const store = new Store();
+const store = new RootStore();
 
-const init = async () => {
-  const promises = Object.values(pages).map(async (importer) => {
-    const test = await importer();
-
-    store.add((test as any).default as Test);
-  });
-
-  return Promise.all(promises);
-}
-
-init();
-
-export type { Test }
+export { RootStore }
 export default store;
