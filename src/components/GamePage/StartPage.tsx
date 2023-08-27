@@ -1,14 +1,14 @@
-import { useSetAtom } from 'jotai';
 import { FC } from 'react';
-import { currentQuestionIdAtom } from '../../hooks/useCurrentQuestion';
+import { observer } from 'mobx-react-lite';
+import store from '../../store';
 
-const StartPage: FC<{ className?: string }> = ({ className }) => {
-  const setCurrentQuestion = useSetAtom(currentQuestionIdAtom);
+const StartPage: FC<{ className?: string }> = observer(({ className }) => {
+  const reset = () => store.gameStateStore.setCurrentWord(0);
 
   return (
     <div className={`${className ?? ''} text-center flex flex-col justify-center`}>
       <div className='flex-1 p-4 mx-auto items-center flex justify-center'>
-        <button className='bg-violet-300 text-2xl font-extrabold rounded-lg p-4 w-40' onClick={() => setCurrentQuestion(0)}>
+        <button className='bg-violet-300 text-2xl font-extrabold rounded-lg p-4 w-40' onClick={reset}>
           START
         </button>
       </div>
@@ -16,6 +16,6 @@ const StartPage: FC<{ className?: string }> = ({ className }) => {
       </div>
     </div>
   )
-}
+});
 
 export default StartPage;

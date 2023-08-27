@@ -1,6 +1,8 @@
 
 type UtteranceMutator = (msg: SpeechSynthesisUtterance) => void;
 
+const pronounce = (word: string): string => [...word].map((c) => c === 'A' ? 'EH' : c).join(' -- ');
+
 const say = async (text: string, mutator?: UtteranceMutator) => {
 
   // View a word
@@ -18,4 +20,6 @@ const say = async (text: string, mutator?: UtteranceMutator) => {
 }
 
 export type { UtteranceMutator };
+export { pronounce };
+
 export default say;

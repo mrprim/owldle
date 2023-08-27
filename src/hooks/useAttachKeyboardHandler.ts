@@ -1,31 +1,27 @@
-import { useCallback, useEffect } from "react";
-import useAnswerActions from "./useAnswerActions";
-import useSubmit, { isSubmittingAtom } from "./useSubmit";
-import { useAtomValue } from "jotai";
+import { useEffect } from "react";
+import store from "../store";
+
+const handler = (e: KeyboardEvent): void => {
+  if (store.gameStateStore.isSubmitting) return;
+  if (e.altKey || e.ctrlKey) return;
+
+
+  const key = e.key;
+
+  if (key !== 'Backspace' && key !== 'Enter' && !key.match(/^[a-zA-Z]$/i)) return;
+  if (key === 'Backspace') {
+    store.gameStateStore.removeLetterFromAnswer();
+  } else if (key === 'Enter') {
+    store.gameStateStore.submit();
+  } else {
+    store.gameStateStore.addLetterToAnswer(key);
+  }
+  e.preventDefault();
+
+};
+
 
 const useAttachKeyboardHandler = () => {
-  const submit = useSubmit();
-  const { addLetter, removeLetter } = useAnswerActions();
-  const isSubmitting = useAtomValue(isSubmittingAtom)
-
-  const handler = useCallback((e: KeyboardEvent): void => {
-    if (isSubmitting) return;
-    if (e.altKey || e.ctrlKey) return;
-
-
-    const key = e.key;
-
-    if (key !== 'Backspace' && key !== 'Enter' && !key.match(/^[a-zA-Z]$/i)) return;
-    if (key === 'Backspace') {
-      removeLetter();
-    } else if (key === 'Enter') {
-      submit();
-    } else {
-      addLetter(key);
-    }
-    e.preventDefault();
-
-  }, [removeLetter, addLetter, submit, isSubmitting]);
 
   useEffect(() => {
     window.addEventListener('keydown', handler)

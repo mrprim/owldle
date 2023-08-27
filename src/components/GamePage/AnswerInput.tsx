@@ -1,43 +1,43 @@
 import { FC } from "react";
-import { useAtomValue } from "jotai";
-import { answerAtom } from "../../hooks/useAnswerActions";
-import useCurrentQuestion from "../../hooks/useCurrentQuestion";
-import { errorStateAtom, isSubmittingAtom } from "../../hooks/useSubmit";
-import useSettings from "../../hooks/useSettings";
 import setCase from "../../utils/setCase";
-import useShowAnswer from "../../hooks/useShowAnswer";
+import { observer } from "mobx-react-lite";
+import store from "../../store";
+import { CapitalizationMode } from "../../store/settingsStore";
 
-interface Props { questionId: number };
-interface BoxProps { value: string, characterId: number };
+interface Props { wordId: number };
+interface BoxProps {
+  value: string,
+  characterId: number,
+  word: string,
+  isError: boolean,
+  isSubmitting: boolean,
+  isAnswerShowing: boolean,
+  capitalization: CapitalizationMode,
+};
 
-const getBorderColor = (value: string, errorState: boolean) => {
-  if (errorState) return 'border-red-500';
+const getBorderColor = (value: string, isError: boolean) => {
+  if (isError) return 'border-red-500';
   if (value) return 'border-gray-800';
   return 'border-gray-300';
 };
 
-const getBgColor = (value: string, errorState: boolean, incorrect: boolean, isSubmitting: boolean) => {
-  if (isSubmitting && !errorState) return 'bg-emerald-300';
-  if (errorState && !value) return 'bg-gray-200';
-  if (errorState && incorrect) return 'bg-red-300';
+const getBgColor = (value: string, isError: boolean, incorrect: boolean, isSubmitting: boolean) => {
+  if (isSubmitting && !isError) return 'bg-emerald-300';
+  if (isError && !value) return 'bg-gray-200';
+  if (isError && incorrect) return 'bg-red-300';
   return '';
 };
 
-const Box: FC<BoxProps> = ({ value, characterId }) => {
-  const [showAnswer] = useShowAnswer();
-  const { capitalization } = useSettings();
-  const { question } = useCurrentQuestion();
-  const errorState = useAtomValue(errorStateAtom);
-  const incorrect = question.spelling[characterId] !== value;
-  const label = setCase(showAnswer && !value ? question.spelling[characterId] ?? '' : value, capitalization)
-  const isSubmitting = useAtomValue(isSubmittingAtom);
+const Box: FC<BoxProps> = ({ value, characterId, word, isError, isSubmitting, isAnswerShowing, capitalization }) => {
+  const incorrect = word[characterId] !== value;
+  const label = setCase(isAnswerShowing && !value ? word?.[characterId] ?? '' : value, capitalization)
 
-  const borderColorName = getBorderColor(value, errorState);
+  const borderColorName = getBorderColor(value, isError);
 
-  const bgColor = getBgColor(value, errorState, incorrect, isSubmitting)
+  const bgColor = getBgColor(value, isError, incorrect, isSubmitting)
 
 
-  const letterColor = (showAnswer && !value) ? 'text-gray-300' : 'text-black';
+  const letterColor = (isAnswerShowing && !value) ? 'text-gray-300' : 'text-black';
 
   return <div className={`
   border-2 ${borderColorName} ${bgColor} ${letterColor}
@@ -53,17 +53,26 @@ const Box: FC<BoxProps> = ({ value, characterId }) => {
   </div>
 }
 
-const AnswerInput: FC<Props> = ({ questionId = 0 }) => {
-  const { maxCharacters } = useSettings();
-  const { id: currentQuestionId } = useCurrentQuestion();
-  const activeAnswer = useAtomValue(answerAtom);
-  const value = currentQuestionId === questionId ? activeAnswer : ''
+const AnswerInput: FC<Props> = observer(({ wordId = 0 }) => {
+  const { maxCharacters, capitalization } = store.settingsStore.settings;
+  const value = store.gameStateStore.answer;
+  const word = store.wordListStore.getWord(wordId)?.spelling ?? '';
+  const arrayOfCharacterIds = [...Array(maxCharacters).keys()];
 
   return <div className='mx-auto my-4'>
     <div className='my-2' onKeyDown={(e) => alert(e.key)}>
-      {[...Array(maxCharacters).keys()].map((i) => <Box key={questionId + '.' + i} value={value?.[i] ?? ''} characterId={i} />)}
+      {arrayOfCharacterIds.map((i) => (
+        <Box
+          key={wordId + '.' + i}
+          value={value?.[i] ?? ''}
+          characterId={i} word={word}
+          isError={store.gameStateStore.isError}
+          isSubmitting={store.gameStateStore.isSubmitting}
+          isAnswerShowing={store.gameStateStore.isAnswerShowing}
+          capitalization={capitalization} />
+      ))}
     </div>
   </div>
-}
+});
 
 export default AnswerInput;

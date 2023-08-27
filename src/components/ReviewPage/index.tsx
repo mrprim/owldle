@@ -1,16 +1,17 @@
 import { FC } from "react"
-import useTest from "../../hooks/useTest";
-import useSpeech from "../../hooks/useSpeech";
+import { observer } from "mobx-react-lite";
+import store from "../../store";
 
 const Word: FC<{ value: string, pronunciation?: string }> = ({ value, pronunciation }) => {
-  const { say } = useSpeech();
   return <div className='my-3 font-bold' >
-    <button onClick={() => say(pronunciation ?? value)}>{value}</button>
+    <button onClick={() => store.speechStore.say(pronunciation ?? value)}>{value}</button>
   </div>
 }
 
-const ReviewPage: FC<{ className?: string }> = ({ className = '' }) => {
-  const test = useTest();
+const ReviewPage: FC<{ className?: string }> = observer(({ className = '' }) => {
+  const test = store.wordListStore.getTest();
+  if (!test) return null;
+
   const midwayIndex = Math.ceil(test.words.length / 2);
 
   const firstColumn = [...test.words].splice(0, midwayIndex);
@@ -26,6 +27,6 @@ const ReviewPage: FC<{ className?: string }> = ({ className = '' }) => {
     </div>
     <p className='max-w-sm mx-auto border-2 border-black p-2'>{test.advice}</p>
   </div>
-}
+});
 
 export default ReviewPage;

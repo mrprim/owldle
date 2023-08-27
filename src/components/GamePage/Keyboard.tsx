@@ -1,8 +1,8 @@
 import { FC } from "react";
-import useAnswerActions from "../../hooks/useAnswerActions";
-import useSubmit from "../../hooks/useSubmit";
-import useSettings, { KeyboardLayout, KeyboardStyle } from "../../hooks/useSettings";
 import setCase from "../../utils/setCase";
+import store from "../../store";
+import { CapitalizationMode, KeyboardLayout, KeyboardStyle } from "../../store/settingsStore";
+import { observer } from 'mobx-react-lite'
 
 
 const LAYOUTS: Record<KeyboardLayout, string[]> = {
@@ -22,11 +22,11 @@ type KeyProps = {
   value: string;
   characterIndex: number;
   rowIndex: number;
+  capitalization: CapitalizationMode;
+  keyboardStyle: KeyboardStyle;
 }
 
 const EnterKey = () => {
-  const submit = useSubmit();
-
   return <div className={`
   font-sans
   bg-slate-300
@@ -37,7 +37,7 @@ const EnterKey = () => {
   rounded-md cursor-pointer
   text-center`}
     onClick={() => {
-      submit();
+      store.gameStateStore.submit();
     }}>
     <p className="flex-grow font-semibold">
       Enter
@@ -46,8 +46,6 @@ const EnterKey = () => {
 }
 
 const BackspaceKey = () => {
-  const { removeLetter } = useAnswerActions();
-
   return <div className={`
   font-sans
   bg-slate-300
@@ -58,7 +56,7 @@ const BackspaceKey = () => {
   rounded-md cursor-pointer
   text-center`}
     onClick={() => {
-      removeLetter();
+      store.gameStateStore.removeLetterFromAnswer();
     }}>
     <p className="flex-grow font-semibold">
       ⌫
@@ -75,9 +73,7 @@ const getKeyboardStyle = (characterIndex: number, keyboardStyle: KeyboardStyle) 
 
 }
 
-const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex }) => {
-  const { capitalization, keyboardStyle } = useSettings();
-  const { addLetter } = useAnswerActions();
+const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex, capitalization, keyboardStyle }) => {
   const label = setCase(value, capitalization);
   const bgColor = getKeyboardStyle(characterIndex + rowIndex, keyboardStyle);
 
@@ -88,7 +84,7 @@ const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex }) => {
   inline-flex items-center align-middle
   rounded-md cursor-pointer
   text-center`} onClick={() => {
-      addLetter(value)
+    store.gameStateStore.addLetterToAnswer(value)
     }}>
     <p className="flex-grow font-semibold">
       {label}
@@ -100,17 +96,25 @@ type RowProps = {
   index: number;
 }
 
-const Row: FC<RowProps> = ({ index }) => {
-  const { keyboardLayout } = useSettings();
+const Row: FC<RowProps> = observer(({ index }) => {
+  const { keyboardLayout, capitalization, keyboardStyle } = store.settingsStore.settings;
+
   const charList = LAYOUTS[keyboardLayout][index];
   return (
     <div className='my-2'>
       {index === 2 && <EnterKey />}
-      {charList.split('').map((char: string, i) => <Key key={char} value={char} characterIndex={i} rowIndex={index} />)}
+      {charList.split('').map((char: string, i) =>
+        <Key key={char}
+          value={char}
+          characterIndex={i}
+          capitalization={capitalization}
+          keyboardStyle={keyboardStyle}
+          rowIndex={index} />)
+      }
       {index === 2 && <BackspaceKey />}
     </div>
   )
-}
+});
 
 const Keyboard: FC = () => {
   return (

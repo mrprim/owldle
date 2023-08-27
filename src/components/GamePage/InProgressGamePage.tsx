@@ -1,16 +1,17 @@
 import { FC } from 'react';
 import useAttachKeyboardHandler from '../../hooks/useAttachKeyboardHandler';
-import useCurrentQuestion from '../../hooks/useCurrentQuestion';
 import AnswerInput from './AnswerInput';
 import Keyboard from './Keyboard';
 import QuestionHeader from './QuestionHeader';
+import { observer } from 'mobx-react-lite';
+import store from '../../store';
 
-const InProgressGamePage: FC<{ className?: string }> = ({ className }) => {
-  const { id: questionId } = useCurrentQuestion();
+const InProgressGamePage: FC<{ className?: string }> = observer(({ className }) => {
+  const wordId = store.gameStateStore.wordId;
 
   useAttachKeyboardHandler();
 
-  if (questionId === null) return null;
+  if (wordId === null) return null;
 
   return (
     <div className={`${className ?? ''} text-center flex flex-col justify-between`}>
@@ -19,8 +20,8 @@ const InProgressGamePage: FC<{ className?: string }> = ({ className }) => {
       </div>
 
       <div className="flex-0" >
-        <QuestionHeader questionId={questionId} />
-        < AnswerInput questionId={questionId} />
+        <QuestionHeader wordId={wordId} />
+        < AnswerInput wordId={wordId} />
       </div>
 
       <div className="flex-0" >
@@ -28,7 +29,6 @@ const InProgressGamePage: FC<{ className?: string }> = ({ className }) => {
       </div>
     </div >
   )
-
-}
+});
 
 export default InProgressGamePage;
