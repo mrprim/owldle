@@ -24,6 +24,7 @@ const ReviewPage: FC<{ className?: string }> = observer(({ className = '' }) => 
   return <div className={`${className}`}>
     <div className="text-center font-bold">Week {'#'}{wordList.week}</div>
     <h3 className="text-center font-extrabold text-2xl">{wordList.rule}</h3>
+    {wordList.subrule && <div className="max-w-sm mx-auto mt-3">{wordList.subrule}</div>}
     <div className='max-w-sm mx-auto p-5 flex flex-row my-5'>
       <div className='flex-1'>{firstColumn.map((q) => <Word key={q.spelling} value={q.spelling} pronunciation={q.pronunciation} capitalization={capitalization} />)}</div>
       <div className='flex-1'>{secondColumn.map((q) => <Word key={q.spelling} value={q.spelling} pronunciation={q.pronunciation} capitalization={capitalization} />)}</div>

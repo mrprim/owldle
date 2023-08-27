@@ -8,15 +8,17 @@ import store from '../../store';
 
 const InProgressGamePage: FC<{ className?: string }> = observer(({ className }) => {
   const wordId = store.gameStateStore.wordId;
+  const wordList = store.gameStateStore.wordList;
 
   useAttachKeyboardHandler();
 
-  if (wordId === null) return null;
+  if (wordId === null || !wordList) return null;
 
   return (
     <div className={`${className ?? ''} text-center flex flex-col justify-between`}>
       <div className='flex-0'>
-
+        <div className="text-center font-bold">Week {'#'}{wordList.week}</div>
+        <h3 className="text-center font-extrabold text-2xl">{wordList.rule}</h3>
       </div>
 
       <div className="flex-0" >
