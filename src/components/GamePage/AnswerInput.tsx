@@ -1,12 +1,19 @@
 import { FC } from "react";
-import useSettings from "../../hooks/useSettings";
 import setCase from "../../utils/setCase";
-import useShowAnswer from "../../hooks/useShowAnswer";
 import { observer } from "mobx-react-lite";
 import store from "../../store";
+import { CapitalizationMode } from "../../store/settingsStore";
 
 interface Props { wordId: number };
-interface BoxProps { value: string, characterId: number, word: string, isError: boolean, isSubmitting: boolean };
+interface BoxProps {
+  value: string,
+  characterId: number,
+  word: string,
+  isError: boolean,
+  isSubmitting: boolean,
+  isAnswerShowing: boolean,
+  capitalization: CapitalizationMode,
+};
 
 const getBorderColor = (value: string, isError: boolean) => {
   if (isError) return 'border-red-500';
@@ -21,18 +28,16 @@ const getBgColor = (value: string, isError: boolean, incorrect: boolean, isSubmi
   return '';
 };
 
-const Box: FC<BoxProps> = ({ value, characterId, word, isError, isSubmitting }) => {
-  const [showAnswer] = useShowAnswer();
-  const { capitalization } = useSettings();
+const Box: FC<BoxProps> = ({ value, characterId, word, isError, isSubmitting, isAnswerShowing, capitalization }) => {
   const incorrect = word[characterId] !== value;
-  const label = setCase(showAnswer && !value ? word?.[characterId] ?? '' : value, capitalization)
+  const label = setCase(isAnswerShowing && !value ? word?.[characterId] ?? '' : value, capitalization)
 
   const borderColorName = getBorderColor(value, isError);
 
   const bgColor = getBgColor(value, isError, incorrect, isSubmitting)
 
 
-  const letterColor = (showAnswer && !value) ? 'text-gray-300' : 'text-black';
+  const letterColor = (isAnswerShowing && !value) ? 'text-gray-300' : 'text-black';
 
   return <div className={`
   border-2 ${borderColorName} ${bgColor} ${letterColor}
@@ -49,13 +54,23 @@ const Box: FC<BoxProps> = ({ value, characterId, word, isError, isSubmitting }) 
 }
 
 const AnswerInput: FC<Props> = observer(({ wordId = 0 }) => {
-  const { maxCharacters } = useSettings();
+  const { maxCharacters, capitalization } = store.settingsStore.settings;
   const value = store.gameStateStore.answer;
   const word = store.wordListStore.getWord(wordId)?.spelling ?? '';
+  const arrayOfCharacterIds = [...Array(maxCharacters).keys()];
 
   return <div className='mx-auto my-4'>
     <div className='my-2' onKeyDown={(e) => alert(e.key)}>
-      {[...Array(maxCharacters).keys()].map((i) => <Box key={wordId + '.' + i} value={value?.[i] ?? ''} characterId={i} word={word} isError={store.gameStateStore.isError} isSubmitting={store.gameStateStore.isSubmitting} />)}
+      {arrayOfCharacterIds.map((i) => (
+        <Box
+          key={wordId + '.' + i}
+          value={value?.[i] ?? ''}
+          characterId={i} word={word}
+          isError={store.gameStateStore.isError}
+          isSubmitting={store.gameStateStore.isSubmitting}
+          isAnswerShowing={store.gameStateStore.isAnswerShowing}
+          capitalization={capitalization} />
+      ))}
     </div>
   </div>
 });

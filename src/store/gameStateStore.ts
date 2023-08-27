@@ -3,22 +3,18 @@ import { RootStore } from ".";
 import { Word } from "./wordListsStore";
 import { pronounce } from "../utils/say";
 
-//TODO SETTINGS
-const maxCharacters = 10;
-
 class GameStateStore {
   root: RootStore;
   wordId: number | null = null;
   isSubmitting: boolean = false;
   isSpeaking: boolean = false;
   isError: boolean = false;
+  isAnswerShowing: boolean = false;
   answer: string = '';
 
   constructor(root: RootStore) {
     this.root = root;
     makeAutoObservable(this);
-
-    this.reset();
   }
 
   reset() {
@@ -34,7 +30,7 @@ class GameStateStore {
     if (!character.match(/^[A-Z]$/i)) throw 'Invalid character';
     this.isError = false;
 
-    if (this.answer.length >= maxCharacters) return;
+    if (this.answer.length >= this.root.settingsStore.settings.maxCharacters) return;
 
     this.answer += character.toUpperCase();
   };
@@ -52,6 +48,10 @@ class GameStateStore {
     return this.root.wordListStore.getWord(this.wordId ?? -1);
   }
 
+  setShowAnswer(v: boolean): void {
+    this.isAnswerShowing = v;
+  }
+
 
   async submit(): Promise<void> {
     const word = this.currentWord;
@@ -63,7 +63,7 @@ class GameStateStore {
       await this.root.speechStore.say('--' + pronounce(word.pronunciation ?? word.spelling) + ' --- ' + (word.pronunciation ?? word.spelling))
       this.reset();
       this.isError = false;
-      // this.showAnswer = false;
+      this.isAnswerShowing = false;
 
       this.wordId = this.wordId !== null ? this.wordId + 1 : 0;
     } else {

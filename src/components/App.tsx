@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import useScreen from '../hooks/useScreen';
 import GamePage from './GamePage';
 import Navbar from './Navbar';
 import ReviewPage from './ReviewPage';
 import SettingsPage from './SettingsPage';
+import { observer } from 'mobx-react-lite';
+import store from '../store';
 
-const App: FC = () => {
-  const [screen] = useScreen();
-
+const App: FC = observer(() => {
+  const screen = store.routingStore.screen;
   return (
     <div className="flex flex-col min-h-full">
       <Navbar className="flex-0" />
@@ -16,6 +16,6 @@ const App: FC = () => {
       {screen === 'settings' && <SettingsPage className="flex-1" />}
     </div>
   )
-}
+});
 
 export default App
