@@ -21,8 +21,10 @@ const PlayAudioButton: FC = observer(() => {
 
   const iconColor = isSpeaking ? 'text-sky-600' : '';
 
-  return <span onClick={() => play()} className={`cursor-pointer ${iconColor}`}>
-    <FontAwesomeIcon icon={isSpeaking ? faVolumeHigh : faVolumeOff} size='2xl' />
+  return <span
+    onClick={() => play()}
+    className={`cursor-pointer ${iconColor}`}>
+    <FontAwesomeIcon icon={isSpeaking ? faVolumeHigh : faVolumeOff} size='2xl' style={{ animation: isSpeaking ? `pulse .5s infinite` : '' }} />
   </span>
 });
 

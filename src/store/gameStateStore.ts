@@ -12,7 +12,6 @@ class GameStateStore {
   week: number | null = DEFAULT_WEEK;
   wordId: number | null = null;
   isSubmitting: boolean = false;
-  isSpeaking: boolean = false;
   isError: boolean = false;
   isAnswerShowing: boolean = false;
   answer: string = '';

@@ -13,7 +13,7 @@ const App: FC = observer(() => {
   const isDarkMode = darkModeSetting === null ? window.matchMedia('(prefers-color-scheme: dark)').matches : darkModeSetting;
   return (
     <div className={`${isDarkMode ? 'dark' : ''} flex flex-col min-h-full`}>
-      <div className={`flex flex-1 flex-col min-h-full text-slate-800 dark:text-white bg-white dark:bg-slate-900`}>
+      <div className={`flex flex-1 flex-col min-h-full text-slate-800  transition-colors  motion-reduce:transition-none dark:text-white bg-white dark:bg-slate-900`}>
         <Navbar className="flex-0" />
         {screen === 'home' && <GamePage className="flex-1" />}
         {screen === 'review' && <ReviewPage className="flex-1" />}

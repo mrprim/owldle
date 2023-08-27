@@ -47,7 +47,8 @@ const Box: FC<BoxProps> = ({ value, characterId, word, isError, isSubmitting, is
     inline-flex items-center align-middle
     font-sans
     text-xl md:text-3xl
-    text-center`}>
+    text-center`}
+    style={{ animation: (isSubmitting || isError) ? `pulse .3s ${characterId * .14}s` : '' }}>
     <p className="flex-grow font-bold">
       {label}
     </p>
