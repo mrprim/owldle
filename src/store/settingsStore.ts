@@ -17,7 +17,7 @@ const INITIAL_SETTINGS: AppSettings = {
   keyboardLayout: 'alpha',
   keyboardStyle: 'colorful',
   capitalization: 'lowercase',
-  darkMode: false,
+  darkMode: null,
   maxCharacters: 10,
 };
 
