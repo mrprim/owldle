@@ -10,7 +10,6 @@ type AppSettings = {
   keyboardStyle: KeyboardStyle;
   capitalization: CapitalizationMode;
   darkMode: boolean | null;
-  maxCharacters: number;
 }
 
 const INITIAL_SETTINGS: AppSettings = {
@@ -18,7 +17,6 @@ const INITIAL_SETTINGS: AppSettings = {
   keyboardStyle: 'colorful',
   capitalization: 'lowercase',
   darkMode: null,
-  maxCharacters: 10,
 };
 
 const LS_KEY = 'owldle.settings';

@@ -15,6 +15,7 @@ class GameStateStore {
   isError: boolean = false;
   isAnswerShowing: boolean = false;
   answer: string = '';
+  maxCharacters: number = 11;
 
   constructor(root: RootStore) {
     this.root = root;
@@ -42,7 +43,7 @@ class GameStateStore {
     if (!character.match(/^[A-Z]$/i)) throw 'Invalid character';
     this.isError = false;
 
-    if (this.answer.length >= this.root.settingsStore.settings.maxCharacters) return;
+    if (this.answer.length >= this.maxCharacters) return;
 
     this.answer += character.toUpperCase();
   };
