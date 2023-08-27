@@ -1,5 +1,4 @@
 import { FC } from "react";
-import setCase from "../../utils/setCase";
 import store from "../../store";
 import { CapitalizationMode, KeyboardLayout, KeyboardStyle } from "../../store/settingsStore";
 import { observer } from 'mobx-react-lite'
@@ -29,7 +28,7 @@ type KeyProps = {
 const EnterKey = () => {
   return <div className={`
   font-sans
-  bg-slate-300
+  bg-slate-300 dark:bg-slate-600
   text-md md:text-xl
   md:w-20 w-16
   h-14 m-1
@@ -48,7 +47,7 @@ const EnterKey = () => {
 const BackspaceKey = () => {
   return <div className={`
   font-sans
-  bg-slate-300
+  bg-slate-300 dark:bg-slate-600
   text-xl
   md:w-20 w-16
   h-14 m-1
@@ -65,17 +64,16 @@ const BackspaceKey = () => {
 }
 
 const getKeyboardStyle = (characterIndex: number, keyboardStyle: KeyboardStyle) => {
-  if (keyboardStyle === 'gray') return 'bg-slate-300';
-  const colors = ['rose', 'emerald', 'amber', 'violet', 'sky'];
+  if (keyboardStyle === 'gray') return 'bg-slate-300  dark:bg-slate-600';
+  const colors = ['rose', 'emerald', 'violet', 'amber', 'sky'];
   const color = colors[characterIndex % colors.length];
 
-  return `bg-${color}-200`;
+  return `dark:bg-${color}-600 bg-${color}-200`;
 
 }
 
 const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex, capitalization, keyboardStyle }) => {
-  const label = setCase(value, capitalization);
-  const bgColor = getKeyboardStyle(characterIndex + rowIndex, keyboardStyle);
+  const bgColor = getKeyboardStyle(characterIndex + rowIndex * 3, keyboardStyle);
 
   return <div className={`
   ${bgColor}
@@ -86,8 +84,8 @@ const Key: FC<KeyProps> = ({ value, characterIndex, rowIndex, capitalization, ke
   text-center`} onClick={() => {
     store.gameStateStore.addLetterToAnswer(value)
     }}>
-    <p className="flex-grow font-semibold">
-      {label}
+    <p className={`flex-grow font-semibold ${capitalization}`}>
+      {value}
     </p>
   </div>
 }

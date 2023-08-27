@@ -2,7 +2,6 @@ import { FC } from "react";
 import { observer } from 'mobx-react-lite'
 import store from "../../store";
 
-
 const SettingsPage: FC<{ className: string }> = observer(({ className = '' }) => {
   const settings = store.settingsStore.settings;
 
@@ -12,9 +11,9 @@ const SettingsPage: FC<{ className: string }> = observer(({ className = '' }) =>
 
         <div className="flex flex-row my-4 items-center gap-4">
           <div className="flex-1 text-right">Site Style</div>
-          <select className="flex-1 rounded-full" onClick={(e) => {
+          <select className="flex-1 rounded-full dark:bg-slate-900 px-6" onClick={(e) => {
             const value = e.target.value;
-            const encoded = value === 'default' ? null : value === 'true'
+            const encoded = value === 'default' ? null : value === 'dark'
             store.settingsStore.set('darkMode', encoded);
           }}>
             <option value="default" selected={settings.darkMode === null}>default</option>
@@ -25,7 +24,7 @@ const SettingsPage: FC<{ className: string }> = observer(({ className = '' }) =>
 
         <div className="flex flex-row my-4 items-center gap-4">
           <div className="flex-1 text-right">Capitalization</div>
-          <select className="flex-1 rounded-full" onClick={(e) => store.settingsStore.set('capitalization', e.target.value)}>
+          <select className="flex-1 rounded-full dark:bg-slate-900 px-6" onClick={(e) => store.settingsStore.set('capitalization', e.target.value)}>
             <option value="lowercase" selected={settings.capitalization === 'lowercase'}>lowercase</option>
             <option value="uppercase" selected={settings.capitalization === 'uppercase'}>UPPERCASE</option>
           </select>
@@ -33,7 +32,7 @@ const SettingsPage: FC<{ className: string }> = observer(({ className = '' }) =>
 
         <div className="flex flex-row my-4 items-center gap-4">
           <div className="flex-1 text-right">Keyboard Layout</div>
-          <select className="flex-1 rounded-full" onClick={(e) => store.settingsStore.set('keyboardLayout', e.target.value)}>
+          <select className="flex-1 rounded-full dark:bg-slate-900 px-6" onClick={(e) => store.settingsStore.set('keyboardLayout', e.target.value)}>
             <option value="alpha" selected={settings.keyboardLayout === 'alpha'}>alpha</option>
             <option value="qwerty" selected={settings.keyboardLayout === 'qwerty'}>qwerty</option>
           </select>
@@ -41,7 +40,7 @@ const SettingsPage: FC<{ className: string }> = observer(({ className = '' }) =>
 
         <div className="flex flex-row my-4 items-center gap-4">
           <div className="flex-1 text-right">Keyboard Style</div>
-          <select className="flex-1 rounded-full" onClick={(e) => store.settingsStore.set('keyboardStyle', e.target.value)}>
+          <select className="flex-1 rounded-full dark:bg-slate-900 px-6" onClick={(e) => store.settingsStore.set('keyboardStyle', e.target.value)}>
             <option value="colorful" selected={settings.keyboardStyle === 'colorful'}>colorful</option>
             <option value="gray" selected={settings.keyboardStyle === 'gray'}>gray</option>
           </select>

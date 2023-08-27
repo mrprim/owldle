@@ -16,7 +16,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "how-do-i-say": "^1.0.1",
-    "jotai": "^2.3.1",
     "mobx": "^6.10.0",
     "mobx-react-lite": "^4.0.3",
     "natural": "^6.5.0",

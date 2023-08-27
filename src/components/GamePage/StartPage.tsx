@@ -8,7 +8,7 @@ const StartPage: FC<{ className?: string }> = observer(({ className }) => {
   return (
     <div className={`${className ?? ''} text-center flex flex-col justify-center`}>
       <div className='flex-1 p-4 mx-auto items-center flex justify-center'>
-        <button className='bg-violet-300 text-2xl font-extrabold rounded-lg p-4 w-40' onClick={reset}>
+        <button className='bg-violet-300 dark:bg-violet-700 text-2xl font-extrabold rounded-lg p-4 w-40' onClick={reset}>
           START
         </button>
       </div>
