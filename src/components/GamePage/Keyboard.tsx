@@ -30,7 +30,7 @@ const EnterKey = () => {
   font-sans
   bg-slate-300 dark:bg-slate-600
   text-md md:text-xl
-  md:w-20 w-16
+  md:w-20 w-14
   h-14 m-1
   inline-flex items-center align-middle
   rounded-md cursor-pointer
@@ -49,7 +49,7 @@ const BackspaceKey = () => {
   font-sans
   bg-slate-300 dark:bg-slate-600
   text-xl
-  md:w-20 w-16
+  md:w-20 w-14
   h-14 m-1
   inline-flex items-center align-middle
   rounded-md cursor-pointer

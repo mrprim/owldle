@@ -7,7 +7,7 @@ const SettingsPage: FC<{ className: string }> = observer(({ className = '' }) =>
 
   return (
     <div className={className}>
-      <div className='max-w-lg mx-auto'>
+      <div className='max-w-lg mx-auto px-4 mt-8'>
 
         <div className="flex flex-row my-4 items-center gap-4">
           <div className="flex-1 text-right">Site Style</div>
