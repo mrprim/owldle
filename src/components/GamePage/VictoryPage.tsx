@@ -1,8 +1,7 @@
 import { FC } from "react";
-import { observer } from "mobx-react-lite";
 import store from "../../store";
 
-const VictoryPage: FC<{ className?: string }> = observer(({ className = '' }) => {
+const VictoryPage: FC<{ className?: string }> = ({ className = '' }) => {
   const reset = () => store.gameStateStore.setCurrentWord(0);
 
   return (
@@ -16,6 +15,6 @@ const VictoryPage: FC<{ className?: string }> = observer(({ className = '' }) =>
       </button>
     </div >
   );
-})
+}
 
 export default VictoryPage;

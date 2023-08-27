@@ -1,8 +1,7 @@
 import { FC } from 'react';
-import { observer } from 'mobx-react-lite';
 import store from '../../store';
 
-const StartPage: FC<{ className?: string }> = observer(({ className }) => {
+const StartPage: FC<{ className?: string }> = ({ className }) => {
   const reset = () => store.gameStateStore.setCurrentWord(0);
 
   return (
@@ -16,6 +15,6 @@ const StartPage: FC<{ className?: string }> = observer(({ className }) => {
       </div>
     </div>
   )
-});
+};
 
 export default StartPage;

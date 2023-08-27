@@ -10,25 +10,25 @@ const Word: FC<{ value: string, pronunciation?: string, capitalization: Capitali
 }
 
 const ReviewPage: FC<{ className?: string }> = observer(({ className = '' }) => {
-  const test = store.wordListStore.getTest();
+  const wordList = store.gameStateStore.wordList;
   const capitalization = store.settingsStore.settings.capitalization;
 
-  if (!test) return null;
+  if (!wordList) return null;
 
-  const midwayIndex = Math.ceil(test.words.length / 2);
+  const midwayIndex = Math.ceil(wordList.words.length / 2);
 
-  const firstColumn = [...test.words].splice(0, midwayIndex);
-  const secondColumn = [...test.words].splice(midwayIndex, test.words.length);
+  const firstColumn = [...wordList.words].splice(0, midwayIndex);
+  const secondColumn = [...wordList.words].splice(midwayIndex, wordList.words.length);
 
 
   return <div className={`${className}`}>
-    <div className="text-center font-bold">Week {'#'}{test.week}</div>
-    <h3 className="text-center font-extrabold text-2xl">{test.rule}</h3>
+    <div className="text-center font-bold">Week {'#'}{wordList.week}</div>
+    <h3 className="text-center font-extrabold text-2xl">{wordList.rule}</h3>
     <div className='max-w-sm mx-auto p-5 flex flex-row my-5'>
       <div className='flex-1'>{firstColumn.map((q) => <Word key={q.spelling} value={q.spelling} pronunciation={q.pronunciation} capitalization={capitalization} />)}</div>
       <div className='flex-1'>{secondColumn.map((q) => <Word key={q.spelling} value={q.spelling} pronunciation={q.pronunciation} capitalization={capitalization} />)}</div>
     </div>
-    <p className='max-w-sm mx-auto border-2 border-slate-900 dark:border-slate-300 p-2'>{test.advice}</p>
+    <p className='max-w-sm mx-auto border-2 border-slate-900 dark:border-slate-300 p-2'>{wordList.advice}</p>
   </div>
 });
 

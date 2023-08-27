@@ -54,10 +54,11 @@ const Box: FC<BoxProps> = ({ value, characterId, word, isError, isSubmitting, is
   </div>
 }
 
-const AnswerInput: FC<Props> = observer(({ wordId = 0 }) => {
+const AnswerInput: FC<Props> = observer(() => {
   const { maxCharacters, capitalization } = store.settingsStore.settings;
+  const wordId = store.gameStateStore.wordId;
   const value = store.gameStateStore.answer;
-  const word = store.wordListStore.getWord(wordId)?.spelling ?? '';
+  const word = store.gameStateStore.word?.spelling ?? '';
   const arrayOfCharacterIds = [...Array(maxCharacters).keys()];
 
   return <div className='mx-auto my-4'>

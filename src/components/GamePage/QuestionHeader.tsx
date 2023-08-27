@@ -15,14 +15,14 @@ const ShowAnswer: FC<{ word: string, isAnswerShowing: boolean, capitalization: C
 };
 
 const QuestionHeader: FC<{ wordId: number }> = observer(({ wordId }) => {
-  const questions = store.wordListStore.getTest()?.words ?? [];
+  const words = store.gameStateStore.wordList?.words ?? [];
   const capitalization = store.settingsStore.settings.capitalization;
 
   return <div>
-    <h3 className='my-3'>#{wordId + 1} of {questions?.length ?? 0} </h3>
+    <h3 className='my-3'>#{wordId + 1} of {words?.length ?? 0} </h3>
     <div>
-      <PlayAudioButton wordId={wordId} />
-      <ShowAnswer word={questions[wordId]?.spelling ?? 'MISSING'} isAnswerShowing={store.gameStateStore.isAnswerShowing} capitalization={capitalization} />
+      <PlayAudioButton />
+      <ShowAnswer word={words[wordId]?.spelling ?? 'MISSING'} isAnswerShowing={store.gameStateStore.isAnswerShowing} capitalization={capitalization} />
     </div>
   </div>
 });

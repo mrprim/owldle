@@ -1,10 +1,15 @@
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
-import { Word } from "./wordListsStore";
+import { Word, WordList } from "./wordListsStore";
 import { pronounce } from "../utils/say";
+
+const DEFAULT_GRADE = 5;
+const DEFAULT_WEEK = 4;
 
 class GameStateStore {
   root: RootStore;
+  grade: number | null = DEFAULT_GRADE;
+  week: number | null = DEFAULT_WEEK;
   wordId: number | null = null;
   isSubmitting: boolean = false;
   isSpeaking: boolean = false;
@@ -19,6 +24,14 @@ class GameStateStore {
 
   reset() {
     this.answer = '';
+  }
+
+  get wordList(): WordList | undefined {
+    return this.root.wordListStore.wordLists.find((wl) => wl.week === this.week && wl.grade === this.grade);
+  }
+
+  get word(): Word | undefined {
+    return this.wordList?.words?.[this.wordId ?? -1];
   }
 
   setCurrentWord(wordId: number | null): void {
@@ -44,17 +57,13 @@ class GameStateStore {
     }
   };
 
-  get currentWord(): Word | undefined {
-    return this.root.wordListStore.getWord(this.wordId ?? -1);
-  }
-
   setShowAnswer(v: boolean): void {
     this.isAnswerShowing = v;
   }
 
 
   async submit(): Promise<void> {
-    const word = this.currentWord;
+    const word = this.word;
     if (!word) return;
 
     this.isSubmitting = true;

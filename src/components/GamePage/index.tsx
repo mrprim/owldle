@@ -7,7 +7,7 @@ import store from '../../store';
 
 const GamePage: FC<{ className?: string }> = observer(({ className }) => {
   const wordId = store.gameStateStore.wordId;
-  const words = store.wordListStore.getTest()?.words;
+  const words = store.gameStateStore.wordList?.words;
 
   if (!words) return null;
   if (wordId == null) return <StartPage className={className} />

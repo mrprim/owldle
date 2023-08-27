@@ -4,20 +4,20 @@ import { faVolumeHigh, faVolumeOff } from "@fortawesome/free-solid-svg-icons";
 import { observer } from "mobx-react-lite";
 import store from "../../store";
 
-const PlayAudioButton: FC<{ wordId: number }> = observer(({ wordId }) => {
-  const question = store.wordListStore.getWord(wordId);
+const PlayAudioButton: FC = observer(() => {
+  const word = store.gameStateStore.word;
   const isSpeaking = store.speechStore.isSpeaking;
 
   const play = useCallback(async () => {
-    await store.speechStore.say(question?.pronunciation ?? question?.spelling ?? 'THIS WORD IS MISSING');
-  }, [question]);
+    await store.speechStore.say(word?.pronunciation ?? word?.spelling ?? 'THIS WORD IS MISSING');
+  }, [word]);
 
   useEffect(() => {
     play()
     return () => {
       window.speechSynthesis.cancel();
     }
-  }, [question, play]);
+  }, [word, play]);
 
   const iconColor = isSpeaking ? 'text-sky-600' : '';
 
