@@ -13,6 +13,7 @@ const say = async (text: string, mutator?: UtteranceMutator) => {
     mutator(msg);
   }
 
+  window.speechSynthesis.cancel();
   return new Promise(function (resolve) {
     msg.onend = resolve;
     window.speechSynthesis.speak(msg)

@@ -65,6 +65,7 @@ class GameStateStore {
   async submit(): Promise<void> {
     const word = this.word;
     if (!word) return;
+    if (this.isSubmitting) return;
 
     this.isSubmitting = true;
 
