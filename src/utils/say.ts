@@ -1,7 +1,16 @@
+import isAndroid from "./isAndroid";
 
 type UtteranceMutator = (msg: SpeechSynthesisUtterance) => void;
 
-const pronounce = (word: string): string => [...word].map((c) => c === 'A' ? 'EH' : c).join(' -- ');
+const pronounceALetter = (c: string) => {
+  if (c.toUpperCase() === 'A') {
+    return isAndroid ? 'A' : 'EH';
+  } else {
+    return c.toUpperCase();
+  }
+}
+
+const pronounce = (word: string): string => [...word].map(pronounceALetter).join(' -- ');
 
 const say = async (text: string, mutator?: UtteranceMutator) => {
 
