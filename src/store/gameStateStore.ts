@@ -4,7 +4,7 @@ import { Word, WordList } from "./wordListsStore";
 import { pronounce } from "../utils/say";
 
 const DEFAULT_GRADE = 5;
-const DEFAULT_WEEK = 4;
+const DEFAULT_WEEK = 5;
 
 class GameStateStore {
   root: RootStore;
