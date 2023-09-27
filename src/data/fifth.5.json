@@ -1,0 +1,57 @@
+{
+  "grade": 5,
+  "week": 5,
+  "rule": "Suffixes: -ed, -er, and -ing",
+  "subrule": "Suffix: The part added to the end of the base word.  It can change the meaning or part of speech of the word.",
+  "advice": "If a word ends with e, drop the e before adding -ed or -ing.  If a one syllable word ends with one vowel followed by a consonant, double the consonants before adding -ing or -ed.",
+  "words": [
+    {
+      "spelling": "WASTING"
+    },
+    {
+      "spelling": "SMELLING"
+    },
+    {
+      "spelling": "DANCING"
+    },
+    {
+      "spelling": "HIKING"
+    },
+    {
+      "spelling": "PLEASING"
+    },
+    {
+      "spelling": "MOVING"
+    },
+    {
+      "spelling": "PAINTER"
+    },
+    {
+      "spelling": "TEACHER"
+    },
+    {
+      "spelling": "BIGGER"
+    },
+    {
+      "spelling": "SMALLER"
+    },
+    {
+      "spelling": "SKIPPED"
+    },
+    {
+      "spelling": "FLIPPED"
+    },
+    {
+      "spelling": "LANDED"
+    },
+    {
+      "spelling": "FAINTED"
+    },
+    {
+      "spelling": "AGREED"
+    },
+    {
+      "spelling": "APPROACHED"
+    }
+  ]
+}
